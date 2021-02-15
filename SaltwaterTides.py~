@@ -72,24 +72,20 @@ for tide in tides:
 tides = [x[:5] for x in filtered_tides]
 tide_times = [x[3] for x in tides]
 
-def modifyTime(x):
-	hours = ""
-	minutes = ""
-	
-	if "PM" in x:
-		x = x.replace("PM","")
-		hours = str(int(x.split(':')[0]) + 12)
-		minutes = x.split(':')[1]
-	else:
-	    x = x.replace("AM","")
-	    hours = x.split(':')[0]
-	    if hours == "12":
-	        hours = "0"
-	    minutes = x.split(':')[1]
+def modifyPmTime(x):
+	x = x.replace("PM","")
+	hours = str(int(x.split(':')[0]) + 12)
+	if hours == "24":
+		hours = "0"
+	minutes = x.split(':')[1]
 	return hours + ":" + minutes
 
-tide_times = [modifyTime(x) for x in tide_times]
-tide_heights = [float(x[4]) for x in tides]
+tide_times = [x.replace("AM","") if "AM" in x else modifyPmTime(x) for x in tide_times]
+tide_heights = [x[4] for x in tides]
+
+print("time\theight")
+for tide in zip(tide_times, tide_heights):
+        print('\t'.join(tide))
 
 plt.plot(tide_times, tide_heights)
 plt.show()
