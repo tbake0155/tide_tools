@@ -79,6 +79,8 @@ def modifyTime(x):
 	if "PM" in x:
 		x = x.replace("PM","")
 		hours = str(int(x.split(':')[0]) + 12)
+		if hours == "24":
+		    hours = "12"
 		minutes = x.split(':')[1]
 	else:
 	    x = x.replace("AM","")
